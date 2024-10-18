@@ -1,66 +1,61 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Professional Services Solutions
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Laravel Junior Developer Test
 
-## About Laravel
+### Project Description:
+This project is a simple CRUD application, focusing on the Company model. It consists of the
+following pages:
+* Welcome page displayed to guests
+* Log In & Register pages
+* User Profile update page
+* Index, create & edit pages for Companies
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A user can interact only with Companies that belong to him. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Through the use of soft deletes, the user is also able to view his Companies that have been deleted and restore or permanently remove them.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Setup Instrctions
+The project was developed locally using Laravel Sail. Assuming that the reviewer has Docker installed,
+the setup process requires the following steps:
 
-## Learning Laravel
+* Clone the repository.
+* Install dependencies via composer.
+* Run ```./vendor/bin/sail up``` to get Sail going.
+* ```./vendor/bin/sail mysql``` to access the MySQL container if needed (e.g. to create the db).
+* ```./vendor/bin/sail up artisan migrate``` to run the migrations.
+* ```./vendor/bin/sail up artisan db:seed``` to seed the database.
+* ```npm install``` to install the node dependencies.
+* ```npm run build``` to create a production build.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The project should now ready to access in ```http://localhost```.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Assumptions
+* An extra model named Sector was created, with its only field being ```name```, mostly for filtering purposes. This model has a
+one-to-many relationship with Company, meaning that a Sector can have many Companies. This model doesn't have any views and it is just
+being populated via the ```SectorSeeder```.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+* Except from the required fields (name, address, website, email), the Company model has also the following fields:
+    * ```number_of_employees```: a simple unsigned integer field, that exists only for extra filtering options.
+    * ```sector_id```: to support the one-to-many relationship between Sectors and Companies.
+    * ```user_id```: to support the one-to-many relationship between Users and Companies.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+* In the Companies index page, the user can filter the companies that he owns via the following filters:
+    * ```number_of_employees```: expressed as ranges (1-10, 11-50, ..., 1001+)
+    * ```sector_id```: the user is able to filter the companies based on multiple sectors (multiple select)
+    * There is also a search field, that searches companies via their name
+  
+* The index page works via ajax requests.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+* I assumed that the ```email``` and ```website``` fields are unique between companies (```name``` field is also unique).
 
-## Contributing
+### Testing
+Run ```sail artisan test``` to run the available tests. The Unit tests that were added are the following:
+* ```CompanyEditTest```: tests whether a user has access only to the edit pages of Companies that he owns 
+* ```UserCompanyRelationshipTest```: tests whether the User-Company one-to-many relationship functions as expected
+*  ```CompanyServiceTest```: the only available test is responsible for testing if the ```getCompanies``` method 
+(called in the Companies index page) only retrieves companies that belong to the current user.  
+* ```CompanyIndexTest```: this test only checks whether a logged in User has access to the Companies index route.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<b>Please contact me if you need more information or there is an issue with the setup process.</b>

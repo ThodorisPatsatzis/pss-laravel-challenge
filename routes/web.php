@@ -9,10 +9,10 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function() {
-        return redirect('/companies');
+        return redirect(route('companies.index'));
     })->name('dashboard');
 
-    Route::get('/companies', [\App\Http\Controllers\CompanyController::class, 'index'])->name('companies');
+    Route::get('/companies', [\App\Http\Controllers\CompanyController::class, 'index'])->name('companies.index');
     Route::get('/companies/create', [\App\Http\Controllers\CompanyController::class, 'create'])->name('company.create');
     Route::post('/companies/create', [\App\Http\Controllers\CompanyController::class, 'store'])->name('company.store');
 

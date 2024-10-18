@@ -9,11 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CompanyOwnerMiddleware
 {
+    // Ensure that the user can only view pages of companies that belongs to him
     public function handle(Request $request, Closure $next): Response
     {
         $company = $this->getCompany($request);
 
-        if(is_null($company) || $company->user_id !== auth()->id()) {
+        if (is_null($company) || $company->user_id !== auth()->id()) {
             return abort(403);
         }
 
@@ -24,7 +25,7 @@ class CompanyOwnerMiddleware
     private function getCompany(Request $request): Company|null
     {
         $company = $request->route('company');
-        if(is_null($company) && !is_null($request->route('id'))) {
+        if (is_null($company) && !is_null($request->route('id'))) {
             $company = Company::withTrashed()->find($request->route('id'));
         }
         return $company;

@@ -13,6 +13,7 @@
             </div>
         </div>
     </x-slot>
+
     <div>
         @include('company.partials.index-filters')
         <div id="companiesIndexTable" class="flex flex-col text-xs lg:text-sm">

@@ -5,6 +5,7 @@
     'selected' => null,
     'selectedLabel' => null,
     'placeholder' => null,
+    'persist' => false,
     'widthClass' => 'w-full'
 ])
 
@@ -13,8 +14,8 @@
         x-data="{
             open: false,
             placeholder: '{{ $placeholder }}',
-            selectedOptionsWithLabels: $persist({}).as('{{ $name }}SelectedOptionsWithLabels'),
-            selectedLabel: $persist('{{!is_null($selectedLabel) ? $selectedLabel : '' }}').as('{{ $name }}SelectedLabel'),
+            selectedOptionsWithLabels: @if($persist) $persist({}).as('{{ $name }}SelectedOptionsWithLabels') @else {} @endif,
+            selectedLabel: @if($persist) $persist('{{!is_null($selectedLabel) ? $selectedLabel : '' }}').as('{{ $name }}SelectedLabel') @else '{{!is_null($selectedLabel) ? $selectedLabel : '' }}' @endif,
             multiple: {{ $multiple ? 'true' : 'false' }},
             isSelected(value) {
                 if(this.multiple) {
@@ -78,8 +79,8 @@
         }"
         class="relative {{ $widthClass }} inline-block text-sm"
     >
-        <button @click="open = !open"
-                class="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-left text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-x-auto flex justify-between">
+        <div @click="open = !open"
+                class="w-full cursor-pointer bg-white border border-gray-300 rounded-lg px-4 py-2 text-left text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-x-auto flex justify-between">
             <template x-if="isEmpty()">
                 <span x-text="placeholder"></span>
             </template>
@@ -105,7 +106,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M19 9l-7 7-7-7"></path>
             </svg>
-        </button>
+        </div>
 
         <ul x-cloak x-show="open" @click.away="open = false"
             class="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">

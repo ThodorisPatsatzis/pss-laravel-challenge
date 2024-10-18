@@ -22,7 +22,7 @@
                     document.getElementById('companiesIndexTable').innerHTML = ''
                     this.updateLastRequestFiltersValues()
 
-                    await fetch('{{ route('companies') }}?' + this.getQueryString(), {
+                    await fetch('{{ route('companies.index') }}?' + this.getQueryString(), {
                          headers: {
                             'X-Requested-With': 'XMLHttpRequest', // This is crucial for Laravel to detect AJAX
                             'Content-Type': 'application/json',
@@ -45,15 +45,10 @@
                     })
                 },
                 isDuplicateRequest() {
-                    if(
-                        this.searchValue === this.previousRequestFiltersValues['searchValue'] &&
-                        this.numberOfEmployeesFilterValue === this.previousRequestFiltersValues['numberOfEmployeesFilterValue'] &&
-                        this.sectionFilterValue === this.previousRequestFiltersValues['sectionFilterValue'] &&
-                        this.showOnlyTrashed === this.previousRequestFiltersValues['showOnlyTrashed']
-                    ) {
-                        return true
-                    }
-                    return false
+                    return  this.searchValue === this.previousRequestFiltersValues['searchValue'] &&
+                            this.numberOfEmployeesFilterValue === this.previousRequestFiltersValues['numberOfEmployeesFilterValue'] &&
+                            this.sectionFilterValue === this.previousRequestFiltersValues['sectionFilterValue'] &&
+                            this.showOnlyTrashed === this.previousRequestFiltersValues['showOnlyTrashed']
                 },
                 updateLastRequestFiltersValues() {
                     this.previousRequestFiltersValues['searchValue'] = this.searchValue
@@ -82,8 +77,8 @@
 >
     <div class="filtersSectionWrapper flex items-center justify-between py-4 px-8 bg-white mb-4 rounded-md">
         <div class="filtersContainer flex gap-2">
-            <x-select selected="sectionFilterValue" :options="$sectorsAsSelectOptions" placeholder="Sections" multiple widthClass="w-[200px]"/>
-            <x-select selected="numberOfEmployeesFilterValue" :options="$employeeRangesAsSelectOptions"  placeholder="Employee Range" widthClass="w-[200px]"/>
+            <x-select selected="sectionFilterValue" :options="$sectorsAsSelectOptions" placeholder="Sections" multiple  persist widthClass="w-[200px]"/>
+            <x-select selected="numberOfEmployeesFilterValue" :options="$employeeRangesAsSelectOptions"  placeholder="Employee Range" persist widthClass="w-[200px]"/>
         </div>
         <div class="searchBarContainer">
             <x-text-input x-model.debounce="searchValue" placeholder="Search..." />

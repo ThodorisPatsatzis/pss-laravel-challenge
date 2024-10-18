@@ -8,39 +8,65 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Create Company
             </h2>
+            <div class="flex items-center gap-4">
+                <a href="{{ route('companies.index') }}">
+                    <button class="py-2 px-4 text-white rounded-sm text-sm bg-gray-500 hover:bg-gray-600 ease-in-out duration-200">
+                        Go Back
+                    </button>
+                </a>
+            </div>
         </div>
     </x-slot>
-
 
     <form action="{{ route('company.store') }}" method="POST">
         @csrf
         <div class="bg-white mx-auto w-[400px] flex flex-col gap-4 items-center p-8 rounded-lg mt-8">
-            <div>
+            <h2 class="text-lg font-semibold">Create Company</h2>
+            <div class="formFieldWrapper w-full">
                 <x-input-label value="Name"/>
-                <x-text-input/>
+                <x-text-input name="name" :value="old('name')" required/>
+                @error('name')
+                <x-input-error :messages="[$message]" />
+                @enderror
             </div>
-            <div>
+            <div class="formFieldWrapper w-full">
                 <x-input-label value="Address"/>
-                <x-text-input/>
+                <x-text-input name="address" :value="old('address')" required/>
+                @error('address')
+                <x-input-error :messages="[$message]" />
+                @enderror
             </div>
-            <div>
+            <div class="formFieldWrapper w-full">
                 <x-input-label value="Website"/>
-                <x-text-input/>
+                <x-text-input name="website" :value="old('website')" required/>
+                @error('website')
+                <x-input-error :messages="[$message]" />
+                @enderror
             </div>
-            <div>
+            <div class="formFieldWrapper w-full">
                 <x-input-label value="Email"/>
-                <x-text-input/>
+                <x-text-input name="email" :value="old('email')" required/>
+                @error('email')
+                <x-input-error :messages="[$message]" />
+                @enderror
             </div>
-            <div>
+            <div class="formFieldWrapper w-full">
                 <x-input-label value="Number of Employees"/>
-                <input type="number" class="border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-md"/>
+                <input type="number" name="number_of_employees" value="{{ old('number_of_employees') }}" required class="w-full border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-md"/>
+                @error('number_of_employees')
+                <x-input-error :messages="[$message]" />
+                @enderror
             </div>
-            <div>
+            <div class="formFieldWrapper w-full" x-data="{ sectorValue: null }">
                 <x-input-label value="Section"/>
-                <x-select placeholder="Select a Section" :options="$sectorsAsSelectOptions" />
+                <input type="text" name="sector_id" x-model="sectorValue" hidden />
+                <x-select name="sector_id" placeholder="Select a Section" selected="sectorValue" :options="$sectorsAsSelectOptions" />
+                @error('sector_id')
+                <x-input-error :messages="[$message]" />
+                @enderror
             </div>
             <button type="submit" class="w-full py-2 rounded-sm bg-blue-500 hover:bg-blue-600 text-white ease-in-out duration-200">
-               Submit
+                Submit
             </button>
         </div>
     </form>
